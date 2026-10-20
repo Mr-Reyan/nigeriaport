@@ -60,7 +60,13 @@ def format_content_html(content):
             for line in lines:
                 line = line.strip()
                 if line and not line.startswith('#'):
-                    html_parts.append(f"            <p>{line}</p>")
+                    # Check if line has **text** pattern (bold markdown)
+                    if line.startswith('**') and line.endswith('**'):
+                        # Remove ** and wrap in strong
+                        bold_text = line[2:-2]
+                        html_parts.append(f"            <p><strong>{bold_text}</strong></p>")
+                    else:
+                        html_parts.append(f"            <p>{line}</p>")
         else:
             # Sections with headers
             # First line is the header
@@ -90,8 +96,14 @@ def format_content_html(content):
                         current_list = []
                         in_list = False
                     
-                    # Add as paragraph
-                    html_parts.append(f"            <p>{line}</p>")
+                    # Check if line has **text** pattern (bold markdown)
+                    if line.startswith('**') and line.endswith('**'):
+                        # Remove ** and wrap in strong
+                        bold_text = line[2:-2]
+                        html_parts.append(f"            <p><strong>{bold_text}</strong></p>")
+                    else:
+                        # Add as paragraph
+                        html_parts.append(f"            <p>{line}</p>")
             
             # Close any remaining list
             if in_list and current_list:
@@ -215,7 +227,7 @@ def generate_page_html(row):
   <main>
     <!-- PORT HERO - EDITORIAL SPLIT -->
     <section class="port-hero">
-      <img src="../assets/imgs/header1.jpg" alt="{page_name}" class="port-hero-bg">
+      <img src="../assets/imgs/nigeria-port-ship-image-portrait.jpg" alt="{page_name}" class="port-hero-bg">
       <div class="container">
         <div class="port-hero-content">
           <ul class="breadcrumb">
